@@ -1,6 +1,6 @@
 # Description: Basic directory searching utilities
 # URL: https://www.gnu.org/software/findutils/
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: cruxppc at gmail dot com
 
 name=findutils
 version=4.8.0
@@ -10,7 +10,17 @@ source=(http://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.xz)
 build() {
 	cd $name-$version
 
-	./configure --prefix=/usr --disable-nls
+
+# If not 64 bit, assume it's 32 bit build and requires TIME_T_32_BIT_OK=yes.  
+	case $(uname -m) in
+	*64)
+            	./configure --prefix=/usr --disable-nls
+		;;
+	*)
+            	TIME_T_32_BIT_OK=yes ./configure --prefix=/usr --disable-nls
+		;;
+    	esac
+
 	make
 	make DESTDIR=$PKG install
 

@@ -1,6 +1,6 @@
 # Description: The GNU Compiler Collection
 # URL: https://gcc.gnu.org
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: cruxppc at gmail dot com
 # Depends on: libmpc zlib zstd
 
 name=gcc
@@ -16,7 +16,7 @@ build() {
 		-i $name-$version/libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp
 
 	patch -d $name-$version -p1 -i $SRC/$name-nocheck-fixincludes.patch
-	patch -d $name-$version -p1 -i $SRC/$name-4.7.3-multilib-dirs.patch
+	#patch -d $name-$version -p1 -i $SRC/$name-4.7.3-multilib-dirs.patch
 
 	# pipe fails tests
 	CFLAGS=${CFLAGS/-pipe/}
@@ -34,14 +34,22 @@ build() {
 		--enable-shared \
 		--enable-lto \
 		--with-x=no \
-		--enable-multilib \
+		--disable-multilib \
+		--disable-bootstrap \
 		--enable-plugin \
 		--enable-default-pie \
 		--enable-default-ssp \
-		--with-pkgversion="CRUX-x86_64-multilib" \
+		--enable-secure-plt \
+		--with-pkgversion="CRUX-PPC" \
 		--with-system-zlib \
 		--disable-nls
-	make bootstrap
+	#make bootstrap
+	make
+
+	#ulimit -s 32768
+	#make -k check || true
+	#../contrib/test_summary
+
 	make -j1 DESTDIR=$PKG install
 
 	install -d $PKG/lib
@@ -54,10 +62,24 @@ build() {
 	rm -r $PKG/usr/bin/*-linux-gnu-*
 	rm -r $PKG/usr/lib/gcc/*/$version/{install-tools,include-fixed}
 
-	for D in lib{,32}; do
-		install -d -m 0755 $PKG/usr/share/gdb/auto-load/usr/${D}
-		mv $PKG/usr/${D}/libstdc++.so.*-gdb.py $PKG/usr/share/gdb/auto-load/usr/${D}
-	done
+	case $(uname -m) in
+		ppc) 
+			install -d -m 0755 $PKG/usr/share/gdb/auto-load/usr/lib
+			mv $PKG/usr/lib/libstdc++.so.*-gdb.py $PKG/usr/share/gdb/auto-load/usr/lib
+			sed -i "s|-L$SRC[^ ]* ||g" $PKG/usr/lib/{libstdc++.la,libsupc++.la} 
+		;;
+   
+		ppc64) 
+			install -d -m 0755 $PKG/usr/share/gdb/auto-load/usr/lib64
+			mv $PKG/usr/lib64/libstdc++.so.*-gdb.py $PKG/usr/share/gdb/auto-load/usr/lib64
+			sed -i "s|-L$SRC[^ ]* ||g" $PKG/usr/lib64/{libstdc++.la,libsupc++.la}
+		;;
+	esac
 
-	sed -i "s|-L$SRC[^ ]* ||g" $PKG/usr/lib{,32}/{libstdc++.la,libsupc++.la}
+	#for D in lib{,32}; do
+	#	install -d -m 0755 $PKG/usr/share/gdb/auto-load/usr/${D}
+	#	mv $PKG/usr/${D}/libstdc++.so.*-gdb.py $PKG/usr/share/gdb/auto-load/usr/${D}
+	#done
+
+	#sed -i "s|-L$SRC[^ ]* ||g" $PKG/usr/lib{,32}/{libstdc++.la,libsupc++.la}
 }

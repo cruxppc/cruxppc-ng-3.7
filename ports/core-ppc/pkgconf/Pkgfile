@@ -1,11 +1,12 @@
 # Description: A system for managing library compile/link flags.
 # URL: https://git.sr.ht/~kaniini/pkgconf
-# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Maintainer: cruxppc at gmail dot com
 
 name=pkgconf
 version=1.8.0
 release=1
-source=(https://distfiles.dereferenced.org/pkgconf/$name-$version.tar.xz
+source=(https://distfiles.dereferenced.org/pkgconf/$name-$version.tar.xz 
+  powerpc-unknown-linux-gnu.personality powerpc64-unknown-linux-gnu.personality 
   i686-pc-linux-gnu.personality x86_64-pc-linux-gnu.personality)
 
 build() {
@@ -20,8 +21,12 @@ build() {
 	DESTDIR=$PKG ninja -C build install
 
 	install -Dt $PKG/usr/share/pkgconfig/personality.d -m644 \
+		powerpc-unknown-linux-gnu.personality \
+		powerpc64-unknown-linux-gnu.personality \
 		i686-pc-linux-gnu.personality \
 		x86_64-pc-linux-gnu.personality
+	ln -s pkgconf $PKG/usr/bin/powerpc-unknown-linux-gnu-pkg-config
+	ln -s pkgconf $PKG/usr/bin/powerpc64-unknown-linux-gnu-pkg-config
 	ln -s pkgconf $PKG/usr/bin/i686-pc-linux-gnu-pkg-config
 	ln -s pkgconf $PKG/usr/bin/x86_64-pc-linux-gnu-pkg-config
 	ln -s pkgconf $PKG/usr/bin/pkg-config
