@@ -31,7 +31,6 @@ build() {
 		--enable-plugins \
 		--enable-install-libiberty \
 		--with-system-zlib \
-		--with-bugurl=https://crux.nu/bugs/ \
 		--disable-nls \
 		--disable-werror
 
