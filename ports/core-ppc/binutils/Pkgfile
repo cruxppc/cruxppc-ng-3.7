@@ -1,0 +1,43 @@
+# Description: The GNU Binutils are a collection of binary tools
+# URL: http://sources.redhat.com/binutils/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: flex zlib
+
+name=binutils
+version=2.37
+release=1
+source=(https://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.xz
+	binutils-2.37-upstream_fix-1.patch CVE-2021-45078.patch)
+
+build() {
+	patch -Np1 -d $name-$version -i $SRC/binutils-2.37-upstream_fix-1.patch
+	patch -p1 -d $name-$version -i $SRC/CVE-2021-45078.patch
+
+	# fix empty manpages
+	sed -i '63d' $name-$version/etc/texi2pod.pl
+	find -name \*.1 -delete
+
+	sed -i '/^SUBDIRS/s/doc//' $name-$version/bfd/Makefile.in
+	sed -i '/^SUBDIRS/s/doc//' $name-$version/binutils/Makefile.in
+
+	mkdir build
+	cd build
+
+	../$name-$version/configure --prefix=/usr \
+		--enable-shared \
+		--enable-ld=default \
+		--enable-gold=yes \
+		--enable-lto \
+		--enable-plugins \
+		--enable-install-libiberty \
+		--with-system-zlib \
+		--with-bugurl=https://crux.nu/bugs/ \
+		--disable-nls \
+		--disable-werror
+
+	make tooldir=/usr
+	make tooldir=/usr DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/info
+	sed -i "s|-L$SRC[^ ]* ||g" $PKG/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes}.la
+}

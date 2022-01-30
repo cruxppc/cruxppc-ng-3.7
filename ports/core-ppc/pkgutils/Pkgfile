@@ -1,0 +1,14 @@
+# Description: A set of utilities to manage software packages
+# URL: https://crux.nu/gitweb/?p=tools/pkgutils.git
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: libarchive
+
+name=pkgutils
+version=5.40.8
+release=1
+source=(https://crux.nu/files/$name-$version.tar.xz)
+
+build () {
+	cd $name-$version
+	make DESTDIR=$PKG install
+}
