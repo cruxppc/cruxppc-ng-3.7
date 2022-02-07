@@ -1,27 +1,45 @@
 # Description: The Rust language with Cargo included.
 # URL: https://www.rust-lang.org/
-# Maintainer:  cruxppc at gmail dot com
-# Depends on: compiler-rt
-# Optional: ccache libgit2 lld polly sccache
+# Maintainer: cruxppc at gmail dot com
+# Depends on: rust-bootstrap
+# (requires either *-bootstrap or rust)
+# Optional: sccache ccache libgit2 lld polly
 
 name=rust
 version=1.58.1
 _date=2021-12-02
 _rustc=1.57.0
 _cargo=$_rustc
-release=2
+_llvm=13.0.0
+release=1
+
+case $(uname -m) in
+	ppc) ARCH=powerpc ;;
+	ppc64) ARCH=powerpc64 ;;
+	*) echo unknown arch!; exit 1 ;;
+esac
 
 source=(https://static.rust-lang.org/dist/${name}c-$version-src.tar.xz
-	https://static.rust-lang.org/dist/$_date/rust-std-$_rustc-x86_64-unknown-linux-gnu.tar.xz
-	https://static.rust-lang.org/dist/$_date/rustc-$_rustc-x86_64-unknown-linux-gnu.tar.xz
-	https://static.rust-lang.org/dist/$_date/cargo-$_cargo-x86_64-unknown-linux-gnu.tar.xz
+	https://github.com/llvm/llvm-project/releases/download/llvmorg-$_llvm/compiler-rt-$_llvm.src.tar.xz
+        ppc32_config.toml
+	0040-rls-atomics.patch
+	0001-Fix-LLVM-build.patch
+	0003-move-debugger-scripts-to-usr-share-rust.patch
+	0004-fix-shebang-on-install-template.sh.patch
+	0006-do-not-install-libunwind-source-removed.patch
+	0007-fix-rustdoc-when-cross-compiling.patch
+	0008-link-stage-2-tools-dynamically-to-libstd.patch
+	fix-ppc32.patch
+	ld-library-path.patch
+	native-sysroot.patch
+	need-ssp-nonshared-and-execinfo.patch
 	libexec.patch
 	0002-compiler-Change-LLVM-targets.patch)
 
 unpack_source() {
 	for file in ${source[@]}; do
 		case ${file##*/} in
-			rustc-${version}-src.tar.xz)
+			rustc-${version}-src.tar.xz|compiler-rt-${_llvm}.src.tar.xz)
 			echo "Unpacking $(get_filename $file)";
 			bsdtar -p -o -C ${SRC} -xf $(get_filename $file) ;;
 		*.tar.xz)
@@ -60,12 +78,25 @@ build() {
 	_check_version
 
 	cd "${name}c-$version-src"
+	patch -p1 -i $SRC/0040-rls-atomics.patch
 
 	# Patch cargo so credential helpers are in /usr/lib instead of /usr/libexec
 	patch -p1 -i $SRC/libexec.patch
 
 	# Use our *-pc-linux-gnu targets, making LTO with clang simpler
 	patch -p1 -i $SRC/0002-compiler-Change-LLVM-targets.patch
+
+        # Various patches 
+	patch -p1 -i $SRC/0001-Fix-LLVM-build.patch
+	patch -p1 -i $SRC/0003-move-debugger-scripts-to-usr-share-rust.patch
+	patch -p1 -i $SRC/0004-fix-shebang-on-install-template.sh.patch
+	patch -p1 -i $SRC/0006-do-not-install-libunwind-source-removed.patch
+	patch -p1 -i $SRC/0007-fix-rustdoc-when-cross-compiling.patch
+	patch -p1 -i $SRC/0008-link-stage-2-tools-dynamically-to-libstd.patch
+	patch -p1 -i $SRC/fix-ppc32.patch
+	patch -p1 -i $SRC/ld-library-path.patch
+	patch -p1 -i $SRC/native-sysroot.patch
+	patch -p1 -i $SRC/need-ssp-nonshared-and-execinfo.patch
 
 cat <<- EOF > $SRC/config.toml
 	changelog-seen = 2
@@ -96,7 +127,7 @@ cat <<- EOF > $SRC/config.toml
 	@LLD@
 
 	[build]
-	target = ["x86_64-unknown-linux-gnu", "i686-unknown-linux-gnu"]
+	target = ["powerpc64-unknown-linux-gnu"]
 	tools = ["cargo", "rls", "clippy", "rustfmt", "analysis", "src", "rust-demangler"]
 	docs = false
 	extended = true
@@ -108,7 +139,7 @@ cat <<- EOF > $SRC/config.toml
 	@RUST@
 	@RUSTFMT@
 
-	[target.x86_64-unknown-linux-gnu]
+	[target.powerpc64-unknown-linux-gnu]
 	llvm-config = "/usr/bin/llvm-config"
 	llvm-filecheck = "/usr/bin/FileCheck"
 EOF
@@ -131,13 +162,18 @@ EOF
 
 	if [ -e '/usr/bin/ccache' ]; then
 		sed -e 's|@CCACHE@|ccache = "/usr/bin/ccache"|' -i $SRC/config.toml
-		PATH=$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')
 	else
 		sed -e 's|@CCACHE@||' -i $SRC/config.toml
 	fi
 
 	prt-get isinst lld && sed -e 's|@LLD@|use-lld = true|' -i $SRC/config.toml || sed -e 's|@LLD@||' -i $SRC/config.toml
 	prt-get isinst polly && sed -e 's|@POLLY@|polly = true|' -i $SRC/config.toml || sed -e 's|@POLLY@||' -i $SRC/config.toml
+
+        # Hack for ppc32 unique config.toml.   This needs to be 
+	# made cleaner.
+	case $(uname -m) in
+		ppc) cp $SRC/ppc32_config.toml $SRC/config.toml ;;
+	esac
 
 	cat $SRC/config.toml
 
@@ -156,7 +192,8 @@ EOF
 
 	export LIBGIT2_NO_PKG_CONFIG=1
 	export RUST_BACKTRACE=full
-	/usr/bin/python3 ./x.py build --config="${SRC}"/config.toml -j ${JOBS-1}
+	export RUST_COMPILER_RT_ROOT="$SRC/compiler-rt-$_llvm.src"
+	/usr/bin/python3 ./x.py build --config="${SRC}"/config.toml -j 1
 	DESTDIR=$PKG /usr/bin/python3 ./x.py --config="${SRC}"/config.toml install
 
 	[ -e '/usr/bin/zsh' ] || rm -r $PKG/usr/share/zsh
@@ -178,5 +215,5 @@ EOF
 	done < <(find "$PKG/usr/lib/rustlib"  -path '*/analysis/*.json' -print0)
 
 	install -d $PKG/etc/revdep.d
-	echo "/usr/lib/rustlib/i686-unknown-linux-gnu/lib" > $PKG/etc/revdep.d/$name
+	#echo "/usr/lib/rustlib/i686-unknown-linux-gnu/lib" > $PKG/etc/revdep.d/$name
 }
