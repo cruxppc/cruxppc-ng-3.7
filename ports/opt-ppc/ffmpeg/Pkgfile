@@ -1,6 +1,6 @@
 # Description: Complete solution to record, convert and stream audio and video.
 # URL: http://ffmpeg.org/
-# Maintainer: Danny Rawlins, crux at romster dot me
+# Maintainer:  cruxppc at gmail dot com
 # Depends on: yasm
 # Optional: alsa-lib cuda dav1d fdk-aac nv-codec-headers gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265
 

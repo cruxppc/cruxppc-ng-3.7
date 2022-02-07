@@ -1,6 +1,6 @@
 # Description: Free Lossless Audio Codec.
 # URL: https://xiph.org/flac/
-# Maintainer: Danny Rawlins, crux at romster dot me
+# Maintainer:  cruxppc at gmail dot com
 # Depends on: libogg
 
 name=flac
