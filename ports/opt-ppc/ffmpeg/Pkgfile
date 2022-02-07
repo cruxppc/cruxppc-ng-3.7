@@ -1,7 +1,7 @@
 # Description: Complete solution to record, convert and stream audio and video.
 # URL: http://ffmpeg.org/
 # Maintainer:  cruxppc at gmail dot com
-# Depends on: yasm
+# Depends on: alsa-lib cuda dav1d fdk-aac nv-codec-headers gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265 yasm
 # Optional: alsa-lib cuda dav1d fdk-aac nv-codec-headers gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265
 
 name=ffmpeg
@@ -17,7 +17,7 @@ build() {
 	#https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-6621
 	patch -p1 -i $SRC/CVE-2018-6621.patch
 
-[ -e '/usr/share/pkgconfig/ffnvcodec.pc' ] && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
+#[ -e '/usr/share/pkgconfig/ffnvcodec.pc' ] && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
 [ -e '/usr/include/AMF/core/VulkanAMF.h' ] && PKGMK_FFMPEG+=' --enable-amf'
 [ -e '/usr/bin/clang' ] && [ -e '/usr/lib/pkgconfig/cuda.pc' ] && PKGMK_FFMPEG+=' --enable-cuda-llvm'
 [ -e '/usr/lib/pkgconfig/libwebp.pc' ] && PKGMK_FFMPEG+=' --enable-libwebp'
@@ -56,6 +56,8 @@ build() {
 		--enable-postproc \
 		--enable-pthreads \
 		--enable-swresample \
+		--disable-altivec \
+		--extra-ldflags="-latomic" \
 		--enable-avresample
 
 	make
