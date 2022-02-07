@@ -1,6 +1,6 @@
 # Description: Free Lossless Audio Codec.
 # URL: https://xiph.org/flac/
-# Maintainer:  cruxppc at gmail dot com
+# Maintainer: cruxppc at gmail dot com
 # Depends on: libogg
 
 name=flac
@@ -16,7 +16,11 @@ build() {
 	patch -p1 -i $SRC/2e7931c.patch # CVE-2020-0499
 	patch -p1 -i $SRC/ced7f68.patch # overflow checks
 
-	./configure --prefix=/usr
+	case $(uname -m) in
+		ppc64) export CONFIG_FLAGS="--enable-altivec --disable-vsx" ;;
+		ppc) export CONFIG_FLAGS="--disable-altivec --disable-vsx" ;;
+	esac
+	./configure --prefix=/usr $CONFIG_FLAGS
 
 	make
 	make DESTDIR=$PKG install
