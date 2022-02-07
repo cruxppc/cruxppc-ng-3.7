@@ -1,0 +1,33 @@
+# Description: Mozilla's JavaScript engine
+# URL: https://spidermonkey.dev/
+# Maintainer: Juergen Daubert, jue at crux dot nu
+# Depends on: autoconf-2.13 readline zlib nspr python3 rust
+
+name=mozjs78
+version=78.15.0
+release=1
+source=(https://archive.mozilla.org/pub/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz
+  Fixup-compatibility-of-mozbuild-with-Python-3.10.patch)
+
+build() {
+	cd firefox-$version
+
+	patch -Np1 -i $SRC/Fixup-compatibility-of-mozbuild-with-Python-3.10.patch
+
+	mkdir obj ; cd obj
+	../js/src/configure \
+		--prefix=/usr \
+		--disable-jemalloc \
+		--disable-debug-symbols \
+		--disable-optimize \
+		--enable-readline \
+		--with-intl-api \
+		--with-system-nspr \
+		--with-system-zlib
+
+	make
+	make DESTDIR=$PKG install
+
+	rm $PKG/usr/lib/libjs_static.ajs
+	chmod -x $PKG/usr/lib/pkgconfig/*
+}

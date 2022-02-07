@@ -1,0 +1,35 @@
+# Description: A free and portable TrueType font rendering engine
+# URL: https://www.freetype.org
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: meson ninja libpng
+# Optional: brotli harfbuzz
+
+name=freetype
+version=2.11.1
+release=1
+
+source=(https://download.savannah.gnu.org/releases/freetype/freetype-$version.tar.xz
+	freetype2.sh
+	0001-Enable-table-validation-modules.patch
+	0002-Enable-subpixel-rendering.patch
+	0003-Enable-infinality-subpixel-hinting.patch
+	0004-Enable-long-PCF-family-names.patch)
+
+build() {
+	patch -Np1 -d $name-$version -i $SRC/0001-Enable-table-validation-modules.patch
+	patch -Np1 -d $name-$version -i $SRC/0002-Enable-subpixel-rendering.patch
+	patch -Np1 -d $name-$version -i $SRC/0003-Enable-infinality-subpixel-hinting.patch
+	patch -Np1 -d $name-$version -i $SRC/0004-Enable-long-PCF-family-names.patch
+
+	meson setup $name-$version build \
+		--prefix=/usr \
+		--buildtype=plain \
+		--wrap-mode=nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D default_library=shared
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	install -Dt $PKG/etc/profile.d -m644 $SRC/freetype2.sh
+}

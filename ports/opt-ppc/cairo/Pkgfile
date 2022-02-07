@@ -1,0 +1,34 @@
+# Description: A 2D graphics library with support for multiple output devices
+# URL: https://www.cairographics.org/
+# Maintainer: CRUX System Team, core-ports at crux dot nu
+# Depends on: fontconfig glib xorg-libpixman xorg-libxext xorg-libxrender xorg-xcb-util
+
+name=cairo
+version=1.17.4
+release=2
+source=(https://cairographics.org/snapshots/$name-$version.tar.xz
+	xlib-xcb.diff fix-library-versioning.diff
+	fix-mask-usage-in-image-compositor.patch fix-pdf-fonts.patch)
+
+build() {
+	patch -p1 -d $name-$version -i $SRC/fix-library-versioning.diff
+	patch -p1 -d $name-$version -i $SRC/xlib-xcb.diff
+	patch -p1 -d $name-$version -i $SRC/fix-mask-usage-in-image-compositor.patch
+	patch -p1 -d $name-$version -i $SRC/fix-pdf-fonts.patch
+
+	prt-get isinst wayland-protocols mesa && PKGMK_CAIRO+=' -D gl-backend=glesv3 -D glesv3=enabled'
+
+	meson setup build $name-$version $PKGMK_CAIRO \
+		--prefix=/usr \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D tee=enabled \
+		-D spectre=disabled \
+		-D tests=disabled
+	meson compile -C build
+	DESTDIR=$PKG meson install -C build
+
+	chmod +x $PKG/usr/bin/cairo-trace
+}
