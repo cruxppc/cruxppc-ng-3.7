@@ -14,8 +14,8 @@ source=(https://cairographics.org/snapshots/$name-$version.tar.xz
 
 
 build() {
-        patch -p1 -i $SRC/cairo-xlib-endianness.patch
-        patch -p1 -i $SRC/cairo-get_bitmap_surface-bsc1036789-CVE-2017-7475.diff
+        patch -p1 -d $name-$version -i $SRC/cairo-xlib-endianness.patch
+        patch -p1 -d $name-$version -i $SRC/cairo-get_bitmap_surface-bsc1036789-CVE-2017-7475.diff
 	patch -p1 -d $name-$version -i $SRC/fix-library-versioning.diff
 	patch -p1 -d $name-$version -i $SRC/xlib-xcb.diff
 	patch -p1 -d $name-$version -i $SRC/fix-mask-usage-in-image-compositor.patch
