@@ -1,15 +1,16 @@
 # Description: The C library used in the GNU system
 # URL: http://www.gnu.org/software/libc/
-# Maintainer: cruxppc at gmail dot com
+# Maintainer: CRUX System Team, core-ports at crux dot nu
 
 name=glibc
-version=2.34
+version=2.35
 release=1
-_kernel_version=5.15.11
+_kernel_version=5.15.21
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz
 	glibc-$version-1.patch
+	C.UTF-8.tar.xz
 	hosts resolv.conf nsswitch.conf host.conf ld.so.conf)
 
 build() {
@@ -48,7 +49,15 @@ build() {
 	install -d $PKG/etc/ld.so.conf.d $PKG/usr/lib/locale
 	touch $PKG/etc/ld.so.cache
 
-	localedef -i POSIX -f UTF-8 $PKG/usr/lib/locale/C.UTF-8 2> /dev/null || true
+	# this doesn't work for some reason the generated locale is broken
+	# for now we supply the locale with the port
+	#$PKG/usr/bin/localedef \
+	#	--force --quiet \
+	#	--inputfile=$PKG/usr/share/i18n/locales/C \
+	#	--charmap=$PKG/usr/share/charmaps/UTF-8 \
+	#	$PKG/usr/lib/locale/C.UTF-8
+
+	cp -r $SRC/C.UTF-8 $PKG/usr/lib/locale
 
 	rm -r $PKG/usr/share/locale \
 		$PKG/usr/bin/{tzselect,zdump} \
