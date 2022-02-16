@@ -4,14 +4,14 @@
 
 name=glibc
 version=2.35
-release=1
+release=2
 _kernel_version=5.15.21
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz
 	glibc-$version-1.patch
-	C.UTF-8.tar.xz
-	hosts resolv.conf nsswitch.conf host.conf ld.so.conf)
+	hosts resolv.conf nsswitch.conf host.conf ld.so.conf
+	locale-gen locale.gen.in)
 
 build() {
 	# install kernel headers
@@ -24,7 +24,7 @@ build() {
 
 	mkdir $SRC/build
 	cd $SRC/build
-	$SRC/$name-${version}/configure \
+	$SRC/$name-$version/configure \
 		--prefix=/usr \
 		--libexecdir=/usr/lib \
 		--with-headers=$PKG/usr/include \
@@ -49,19 +49,22 @@ build() {
 	install -d $PKG/etc/ld.so.conf.d $PKG/usr/lib/locale
 	touch $PKG/etc/ld.so.cache
 
-	# this doesn't work for some reason the generated locale is broken
-	# for now we supply the locale with the port
-	#$PKG/usr/bin/localedef \
-	#	--force --quiet \
-	#	--inputfile=$PKG/usr/share/i18n/locales/C \
-	#	--charmap=$PKG/usr/share/charmaps/UTF-8 \
-	#	$PKG/usr/lib/locale/C.UTF-8
+	install -Dm755 $SRC/locale-gen $PKG/usr/sbin/locale-gen
+	install -Dm644 $SRC/locale.gen.in $PKG/etc/locale.gen
 
-	cp -r $SRC/C.UTF-8 $PKG/usr/lib/locale
+	LC_ALL=C ./elf/ld.so --library-path . $PKG/usr/bin/localedef \
+		--force --quiet \
+		--inputfile=$SRC/$name-$version/localedata/locales/C \
+		--charmap=$SRC/$name-$version/localedata/charmaps/UTF-8 \
+		$PKG/usr/lib/locale/C.UTF-8 || true
 
 	rm -r $PKG/usr/share/locale \
 		$PKG/usr/bin/{tzselect,zdump} \
 		$PKG/usr/sbin/zic
+
+	install -Dm644 $SRC/$name-$version/intl/locale.alias \
+		$PKG/usr/share/locale/locale.alias
+
 	find $PKG -name "*install.cmd" -delete
 	find $PKG -name ".\install" -delete
 }

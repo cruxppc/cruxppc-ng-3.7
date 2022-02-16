@@ -1,3 +1,4 @@
 #!/bin/sh
 
 /sbin/telinit U
+/usr/sbin/locale-gen

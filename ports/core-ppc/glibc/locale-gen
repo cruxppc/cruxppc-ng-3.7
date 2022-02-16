@@ -1,0 +1,50 @@
+#!/bin/sh
+
+set -e
+
+LOCALEGEN=/etc/locale.gen
+LOCALES=/usr/share/i18n/locales
+
+[ -f "$LOCALEGEN" ] && [ -s "$LOCALEGEN" ] || exit 0;
+
+# remove old locale-archive
+[ -f /usr/lib/locale/locale-archive ] && rm -f /usr/lib/locale/locale-archive
+
+umask 022
+
+is_entry_ok() {
+	if [ -n "$locale" ] && [ -n "$charset" ] ; then
+		true
+	else
+		printf '%s' "error: Bad entry '$locale $charset'"
+		false
+	fi
+}
+
+printf '%s\n' "Generating locales..."
+
+while read -r locale charset; do \
+	case "$locale" in 
+		\#*|"") continue;; 
+	esac; \
+
+	is_entry_ok || continue
+
+	printf '%s' "$(echo "$locale" | sed 's/\([^.\@]*\).*/\1/')"
+	printf '%s' ".$charset"
+	printf '%s' "$(echo "$locale" | sed 's/\([^\@]*\)\(\@.*\)*/\2/')"
+	printf '%s' "..."
+
+	if [ -f "$LOCALES/$locale" ]; then 
+		input=$locale
+	else
+		input=$(echo "$locale" | sed 's/\([^.]*\)[^@]*\(.*\)/\1\2/')
+	fi
+
+	localedef -i "$input" -c -f "$charset" \
+		-A /usr/share/locale/locale.alias "$locale"
+
+	printf '%s\n' "done"
+done < $LOCALEGEN
+
+printf '%s\n' "Generation complete."
