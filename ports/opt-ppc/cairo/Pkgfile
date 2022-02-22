@@ -1,39 +1,33 @@
 # Description: A 2D graphics library with support for multiple output devices
 # URL: https://www.cairographics.org/
-# Maintainer:  cruxppc at gmail dot com
-# Depends on: fontconfig glib xorg-libpixman xorg-libxext xorg-libxrender xorg-xcb-util
+# Maintainer: Fredrik Rinnestam, fredrik at crux dot nu
+# Depends on: fontconfig, xorg-libxext, xorg-libxrender, xorg-libpixman, xorg-xcb-util, glib
 
 name=cairo
 version=1.17.4
 release=2
-source=(https://cairographics.org/snapshots/$name-$version.tar.xz
+source=(https://cairographics.org/snapshots/cairo-$version.tar.xz
 	cairo-xlib-endianness.patch
 	cairo-get_bitmap_surface-bsc1036789-CVE-2017-7475.diff 
-	xlib-xcb.diff fix-library-versioning.diff
-	fix-mask-usage-in-image-compositor.patch fix-pdf-fonts.patch)
-
+	fix-mask-usage-in-image-compositor.patch
+	fix-pdf-fonts.patch
+	CVE-2018-19876.patch)
 
 build() {
-        patch -p1 -d $name-$version -i $SRC/cairo-xlib-endianness.patch
-        patch -p1 -d $name-$version -i $SRC/cairo-get_bitmap_surface-bsc1036789-CVE-2017-7475.diff
-	patch -p1 -d $name-$version -i $SRC/fix-library-versioning.diff
-	patch -p1 -d $name-$version -i $SRC/xlib-xcb.diff
-	patch -p1 -d $name-$version -i $SRC/fix-mask-usage-in-image-compositor.patch
-	patch -p1 -d $name-$version -i $SRC/fix-pdf-fonts.patch
+        cd $name-$version
+        patch -p1 -i $SRC/cairo-xlib-endianness.patch
+        patch -p1 -i $SRC/cairo-get_bitmap_surface-bsc1036789-CVE-2017-7475.diff
+#	patch -p1 -i $SRC/CVE-2018-19876.patch
+#	patch -p1 -i $SRC/fix-mask-usage-in-image-compositor.patch
+	patch -p1 -i $SRC/fix-pdf-fonts.patch
 
-	prt-get isinst wayland-protocols mesa && PKGMK_CAIRO+=' -D gl-backend=glesv3 -D glesv3=enabled'
-
-	meson setup build $name-$version $PKGMK_CAIRO \
-		--prefix=/usr \
-		--buildtype=plain \
-		--wrap-mode nodownload \
-		-D b_lto=true \
-		-D b_pie=true \
-		-D tee=enabled \
-		-D spectre=disabled \
-		-D tests=disabled
-	meson compile -C build
-	DESTDIR=$PKG meson install -C build
-
-	chmod +x $PKG/usr/bin/cairo-trace
+        ./configure --prefix=/usr \
+                --enable-xcb=yes \
+                --enable-ps \
+                --enable-pdf \
+                --disable-gtk-doc \
+                --enable-tee=yes
+        make
+        make DESTDIR=$PKG install
+        rm -rf $PKG/usr/share
 }
