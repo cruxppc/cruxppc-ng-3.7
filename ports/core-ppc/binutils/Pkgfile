@@ -6,11 +6,13 @@
 name=binutils
 version=2.38
 release=1
-source=(https://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.xz)
+source=(https://ftpmirror.gnu.org/gnu/$name/$name-$version.tar.xz
+	binutils-2.38-ppc-fix-1.patch)
 
 build() {
 	# don't rebuild gas/doc/asconfig, would require texinfo
 	sed '2209,2212s/^/##/' -i $name-$version/gas/Makefile.in
+	patch -p1 -d $SRC/$name-${version} -i $SRC/binutils-2.38-ppc-fix-1.patch
 
 	mkdir build
 	cd build
