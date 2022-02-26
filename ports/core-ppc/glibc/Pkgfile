@@ -51,6 +51,8 @@ build() {
 
 	install -Dm755 $SRC/locale-gen $PKG/usr/sbin/locale-gen
 	install -Dm644 $SRC/locale.gen.in $PKG/etc/locale.gen
+	sed -e '1,3d' -e 's|/| |g' -e 's|\\| |g' -e 's|^|#|g' \
+		$SRC/$name-$version/localedata/SUPPORTED >> $PKG/etc/locale.gen
 
 	LC_ALL=C ./elf/ld.so --library-path . $PKG/usr/bin/localedef \
 		--force --quiet \
