@@ -41,7 +41,7 @@ build() {
 	make install_root=$PKG install
 
 	install -m 0644 $SRC/$name-${version:0:4}/nscd/nscd.conf $PKG/etc
-	install -d $PKG/var/{db,run}/nscd
+	install -d $PKG/var/db/nscd
 
 	install -m 0644 $SRC/{hosts,resolv.conf,nsswitch.conf,host.conf,ld.so.conf} $PKG/etc
 
