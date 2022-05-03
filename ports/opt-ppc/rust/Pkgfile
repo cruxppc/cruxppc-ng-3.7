@@ -10,7 +10,7 @@ version=1.60.0
 _date=2022-02-24
 _rustc=1.59.0
 _cargo=$_rustc
-_llvm=14.0.1
+_llvm=14.0.3
 release=1
 
 case $(uname -m) in
