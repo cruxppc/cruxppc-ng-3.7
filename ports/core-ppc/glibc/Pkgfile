@@ -3,9 +3,9 @@
 # Maintainer: CRUX System Team, core-ports at crux dot nu
 
 name=glibc
-version=2.35
-release=2
-_kernel_version=5.15.21
+version=2.36
+release=1
+_kernel_version=5.15.55
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz

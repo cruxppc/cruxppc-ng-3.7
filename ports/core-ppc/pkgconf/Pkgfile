@@ -3,7 +3,7 @@
 # Maintainer: cruxppc at gmail dot com
 
 name=pkgconf
-version=1.8.0
+version=1.9.3
 release=1
 source=(https://distfiles.dereferenced.org/pkgconf/$name-$version.tar.xz 
   powerpc-unknown-linux-gnu.personality powerpc64-unknown-linux-gnu.personality 
