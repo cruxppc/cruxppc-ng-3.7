@@ -5,13 +5,14 @@
 # Optional: lld
 
 name=llvm
-version=14.0.5
+version=14.0.6
 release=1
 source=(https://github.com/llvm/llvm-project/releases/download/llvmorg-$version/llvm-$version.src.tar.xz
 	llvm-config.h)
 
 build() {
-	prt-get isinst ccache && PKGMK_LLVM+=' -D LLVM_CCACHE_BUILD=ON'
+	prt-get isinst ccache && PKGMK_LLVM+=' -D LLVM_CCACHE_BUILD=ON' && \
+		export PATH="$(echo ${PATH} | awk -v RS=: -v ORS=: '/ccache/ {next} {print}' | sed 's/:*$//')"
 
 	cmake -S $name-$version.src -B build -G Ninja $PKGMK_LLVM \
 		-D CMAKE_INSTALL_PREFIX=/usr \
