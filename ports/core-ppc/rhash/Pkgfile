@@ -1,0 +1,28 @@
+# Description: Great utility for computing hash sums
+# URL: https://github.com/rhash/RHash
+# Maintainer: cruxppc at gmail dot com
+
+name=rhash
+version=1.4.3
+release=1
+source=(https://github.com/rhash/RHash/archive/v$version/$name-$version.tar.gz)
+
+build() {
+	cd RHash-$version
+
+	sed -i -e '/^INSTALL_SHARED/s/644/755/' librhash/Makefile
+
+	./configure --prefix=/usr \
+		--sysconfdir=/etc \
+		--enable-lib-{static,shared} \
+		--extra-cflags="$CFLAGS" \
+		--extra-ldflags="$LDFLAGS"
+
+	make
+	#make test test-lib
+
+	make DESTDIR=$PKG install
+	make -C librhash DESTDIR=$PKG install-lib-headers install-so-link
+	install -Dm0644 -o root -g root dist/librhash.pc \
+		$PKG/usr/lib/pkgconfig/librhash.pc
+}
