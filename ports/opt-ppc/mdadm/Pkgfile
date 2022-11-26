@@ -1,0 +1,21 @@
+# Description: Multiple device (RAID) admin tool
+# URL: http://neil.brown.name/blog/mdadm
+# Maintainer: cruxppc at gmail dot com
+
+name=mdadm
+version=4.2
+release=2
+source=(http://www.kernel.org/pub/linux/utils/raid/$name/$name-$version.tar.xz
+	$name-$version-in_initrd-collision.patch)
+
+build() {
+	cd $name-$version
+
+	# From gentoo
+	patch -p1 -i $SRC/$name-$version-in_initrd-collision.patch
+        sed -i 's@Werror@Wno-error@g' $SRC/$name-$version/Makefile
+
+	make all mdadm.static
+	make DESTDIR=$PKG install
+	install -m0755 mdadm.static $PKG/sbin
+}
