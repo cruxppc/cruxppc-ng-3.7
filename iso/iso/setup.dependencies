@@ -33,7 +33,6 @@ gcc: libgmp zlib xz libmpfr zstd libmpc gcc
 gdbm: ncurses readline gdbm 
 gettext: attr ncurses acl gettext 
 glibc: glibc 
-glibc-32: glibc-32 
 gperf: gperf 
 grep: libpcre2 grep 
 groff: groff 
