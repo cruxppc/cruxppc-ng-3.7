@@ -69,6 +69,7 @@ pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libgpg-error#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libmpfr#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libnl#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libpcre#*.pkg.tar.xz
+pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libpcre2#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/libusb#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/linux-pam#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/lvm2#*.pkg.tar.xz
@@ -77,6 +78,7 @@ pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/mac-fdisk#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/mdadm#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/memtester*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/nvsetenv#*.pkg.tar.xz
+pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/openssl#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/patch#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/pkgutils#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/popt#*.pkg.tar.xz
