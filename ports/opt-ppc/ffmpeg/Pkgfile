@@ -1,30 +1,24 @@
 # Description: Complete solution to record, convert and stream audio and video.
 # URL: https://ffmpeg.org/
 # Maintainer: cruxppc at gmail com
-# Depends on: alsa-lib dav1d fdk-aac nv-codec-headers jack lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265 yasm
+# Depends on: alsa-lib dav1d fdk-aac nv-codec-headers lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265 yasm
 # Optional: alsa-lib cuda dav1d fdk-aac nv-codec-headers gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265
 
 name=ffmpeg
 version=5.1.2
 release=1
 source=(https://ffmpeg.org/releases/$name-$version.tar.bz2
-	ffmpeg-x264-10bit.sh
-	vmaf-model-path.patch
-	add-av_stream_get_first_dts-for-chromium.patch)
+	add-av_stream_get_first_dts-for-chromium.patch
+	ffmpeg-x264-10bit.sh)
 
 build() {
 	cd $name-$version
-
-	patch -p1 -i $SRC/vmaf-model-path.patch
-
-	# https://crbug.com/1251779
-	patch -p1 -i $SRC/add-av_stream_get_first_dts-for-chromium.patch
 
 [[ -e '/usr/bin/clang' && -e '/usr/lib/pkgconfig/cuda.pc' && -e '/usr/share/pkgconfig/ffnvcodec.pc' ]] && \
 	PKGMK_FFMPEG+=' --enable-cuda-llvm --enable-nonfree --enable-cuda-nvcc --enable-libnpp' && \
 	PKGMK_FFMPEG+=' --extra-cflags=-I/opt/cuda/include --extra-ldflags=-L/opt/cuda/lib64' && PATH="$PATH:/opt/cuda/bin"
 
-#[ -e '/usr/share/pkgconfig/ffnvcodec.pc' ] && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
+[ -e '/usr/share/pkgconfig/ffnvcodec.pc' ] && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
 [ -e '/usr/include/AMF/core/VulkanAMF.h' ] && PKGMK_FFMPEG+=' --enable-amf'
 [ -e '/usr/lib/pkgconfig/libwebp.pc' ] && PKGMK_FFMPEG+=' --enable-libwebp'
 [ -e '/usr/lib/pkgconfig/vdpau.pc' ] && PKGMK_FFMPEG+=' --enable-vdpau'
@@ -48,6 +42,8 @@ build() {
 	else
 		PKGMK_FFMPEG+=' --enable-openssl --enable-nonfree'
 	fi
+
+	patch -Np1 -i $SRC/add-av_stream_get_first_dts-for-chromium.patch
 
 	./configure ${PKGMK_FFMPEG} \
 		--prefix=/usr \
