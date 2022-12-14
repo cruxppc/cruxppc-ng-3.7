@@ -1,6 +1,6 @@
 # Description: Root filesystem package
-# URL:         http://crux.nu
-# Maintainer:  CRUX System Team, core-ports at crux dot nu
+# URL:         http://www.github.com/cruxppc/cruxppc-ng-3.7
+# Maintainer:  cruxppc at gmail dot com
 
 name=filesystem
 version=3.6
@@ -19,14 +19,14 @@ build() {
 	install -d $PKG/etc
 	install -d $PKG/mnt
 	install -d $PKG/run
-	install -d $PKG/lib{,32}
+	install -d $PKG/lib
 	ln -s lib $PKG/lib64
 	install -d $PKG/lib/modules
 	install -d $PKG/opt
 	install -d $PKG/opt/bin
 	install -d $PKG/opt/sbin
 	install -d $PKG/usr
-	install -d $PKG/usr/{bin,include,lib{,32},sbin,share,src}
+	install -d $PKG/usr/{bin,include,lib,sbin,share,src}
 	ln -s lib $PKG/usr/lib64
 	install -d -p $PKG/usr/share/man/man{1,2,3,4,5,6,7,8}
 	ln -s ../var $PKG/usr/var
@@ -72,7 +72,7 @@ build() {
 cat > $PKG/usr/bin/crux << EOF
 #!/bin/sh
 
-echo "CRUX version $version"
+echo "CRUX-PPC version $version"
 
 # End of file
 EOF
@@ -80,11 +80,11 @@ EOF
 
 	# /etc/os-release
 cat > $PKG/etc/os-release << EOF
-NAME=CRUX
+NAME=CRUX-PPC
 VERSION="$version"
 ID=crux
-PRETTY_NAME="CRUX"
-HOME_URL="https://crux.nu/"
-BUG_REPORT_URL="https://crux.nu/bugs/"
+PRETTY_NAME="CRUX-PPC"
+HOME_URL="https://www.github.com/cruxppc/cruxppc-ng-3.7/"
+BUG_REPORT_URL="https://www.github.com/cruxppc/cruxppc-ng-3.7/bugs/"
 EOF
 }
