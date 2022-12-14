@@ -3,8 +3,8 @@
 # Maintainer:  cruxppc at gmail dot com
 
 name=filesystem
-version=3.6
-release=2
+version=3.7
+release=3
 source=(issue motd shells group passwd shadow securetty fstab mime.types)
 
 build() {
@@ -36,8 +36,9 @@ build() {
 	install -d $PKG/var/lib/pkg
 	install -d $PKG/var/log
 	install -d $PKG/var/log/old
-	install -d $PKG/var/run
-	touch $PKG/var/run/utmp
+	ln -s ../run/ $PKG/var/run
+	# can't be in the Pkgfile anymore
+	#touch $PKG/var/run/utmp
 	install -d $PKG/var/spool
 	install -d $PKG/var/ftp
 	install -d $PKG/var/www
@@ -69,7 +70,7 @@ build() {
 	ln -s /proc/self/mounts $PKG/etc/mtab
 
 	# /usr/bin/crux
-cat > $PKG/usr/bin/crux << EOF
+	cat > $PKG/usr/bin/crux << EOF
 #!/bin/sh
 
 echo "CRUX-PPC version $version"
@@ -79,7 +80,7 @@ EOF
 	chmod 755 $PKG/usr/bin/crux
 
 	# /etc/os-release
-cat > $PKG/etc/os-release << EOF
+	cat > $PKG/etc/os-release << EOF
 NAME=CRUX-PPC
 VERSION="$version"
 ID=crux
