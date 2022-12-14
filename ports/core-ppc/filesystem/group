@@ -26,3 +26,17 @@ dhcpcd::24:
 nobody::99:
 messagebus::81:
 users::100:
+chrony:x:55:
+dovecot:x:999:
+fcron:x:45:
+mysql:x:998:
+nsd:x:997:
+polkitd:x:996:
+postdrop:x:1001:
+pulse:x:1002:
+pulse-access:x:1003:
+squid:x:995:
+stunnel:x:48:
+unbound:x:994:
+wireshark:x:1004:
+distcc:x:993:
