@@ -1,22 +1,19 @@
 Note: This document is revised from time to time.   If you are reading
 this from the install iso, be aware that there may be a newer
-version of this document in www.github.com/cruxppc/cruxppc-ng-3.6/iso/doc.
+version of this document in www.github.com/cruxppc/cruxppc-ng-3.7/iso/doc.
 
-Release Notes for CRUX PPC 3.6
-03/04/2022
+Release Notes for CRUX PPC 3.7
+12/20/2022
 
-   This page discusses the relevant changes introduced in CRUX PPC 3.6.
+   This page discusses the relevant changes introduced in CRUX PPC 3.7.
 
-   This is the CRUX PPC 3.6 release.   
-
-   In this release update, various packages have been updated to their most 
-   recent versions.   No functional changes have been made.
+   This is the CRUX PPC 3.7 release.   
 
    
   Supported machines:
 
    Apple 32bit "NewWorld" G4 and (in theory) G3 machines are supported.  In 
-   practice however, most of building and testing of CRUX PPC 3.6 is 
+   practice however, most of building and testing of CRUX PPC 3.7 is 
    performed on G4 machines, and G3 is only minimally tested.
 
    PowerMac G5 64bit PowerPC machines are also supported.   
@@ -37,7 +34,7 @@ Release Notes for CRUX PPC 3.6
    otherwise function as expected.   
   
    A minimum of 256Meg RAM and a few Gig of disk space is required to 
-   install CRUX PPC 3.6.   Even 128Meg RAM might work but after install,
+   install CRUX PPC 3.7.   Even 128Meg RAM might work but after install,
    the user may want to build additional packages and lower RAM machines
    may not work well when building additional packages.
  
@@ -45,16 +42,16 @@ Release Notes for CRUX PPC 3.6
 
   Toolchain updates
 
-   CRUX PPC 3.6 includes glibc 2.32, gcc 9.4.0 and binutils 2.35.2
+   CRUX PPC 3.7 includes glibc 2.36, gcc 12.2.0 and binutils 2.39
 
   Kernel
 
-   Linux-5.4.72
+   Linux-5.15.55
 
   Important changes
 
-   CRUX PPC 3.6 is a new port of CRUX 3.6 to the PowerPC.  There is no support
-   for upgrading from any earlier CRUX PPC releases to 3.6.  Likewise, 
+   CRUX PPC 3.7 is a new port of CRUX 3.7 to the PowerPC.  There is no support
+   for upgrading from any earlier CRUX PPC releases to 3.7.  Likewise, 
    future CRUX PPC releases will not likely support upgrading from this
    release, so make notes of any local configuration changes made so
    that your changes can be remade when installing later CEUX PPC releases.
@@ -139,10 +136,6 @@ Release Notes for CRUX PPC 3.6
    rebuilt natively on the G3 machine in order to function properly.
    If a package causes illegal instruction exceptions, it may need
    to be rebuilt on the G3 machine to function properly.   
-
-   CRUX PPC 3.6 provides gcc 9.4.0 rather than the more recent 
-   gcc 10.2.0.   The build of nss (on 32bit at least) failed with
-   an illegal instruction with 10.2.0.   So, gcc was backed down to 9.4.0.   
 
    Several other packages (e.g. cairo) are downreved compared to 
    mainline CRUX.   This is due to build and or runtime isses on 

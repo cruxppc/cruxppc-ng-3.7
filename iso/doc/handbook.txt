@@ -9,7 +9,7 @@ concise description of installation and configuration.  The supplemental
 materials provide additional information that may helpful.
 
 
-HANDBOOK FOR CRUX PPC 3.6   (preliminary WIP)
+HANDBOOK FOR CRUX PPC 3.7   (preliminary WIP)
 03/04/2022
 
    1. Preface
@@ -104,7 +104,7 @@ HANDBOOK FOR CRUX PPC 3.6   (preliminary WIP)
          2. Installation
          3. Configuration
 
-                        CRUX PPC Handbook - release 3.6
+                        CRUX PPC Handbook - release 3.7
 
    Copyright (c) 2001-2004 Per Liden
    Copyright (c) 2004-2005 Giulivo Navigante
@@ -201,7 +201,7 @@ Installing CRUX PPC
    oriented for Apple NewWorld (G3, G4, 32 bit only).   
 
    A minimum of 256Meg of RAM is needed to boot the install CD and
-   install CRUX PPC 3.6.   However, the CRUX user may find the time needed
+   install CRUX PPC 3.7.   However, the CRUX user may find the time needed
    to compile additional CRUX packages on lower end machines to be quite
    lengthy.
 
@@ -495,7 +495,7 @@ Installing CRUX PPC
 
   Upgrading From CD-ROM
 
-   Upgrading from a previous crux ppc to crux ppc 3.6 is not supported.  
+   Upgrading from a previous crux ppc to crux ppc 3.7 is not supported.  
    You may try it if you wish but it is not likely to work.   
 
    1.   Download   the   CRUX    PPC   ISO   image   (crux-ppc-3.6.iso    or
