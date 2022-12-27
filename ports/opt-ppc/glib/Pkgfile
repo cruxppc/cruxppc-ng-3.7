@@ -1,0 +1,35 @@
+# Description: Low-level data structure handling, portability wrappers, and interfaces for runtime functionality
+# URL: https://www.gtk.org/
+# Maintainer: cruxppc at gmail dot com
+# Depends on: elfutils libffi libpcre2 meson ninja util-linux
+
+name=glib
+version=2.74.3
+release=1
+source=(https://download.gnome.org/sources/$name/${version:0:4}/$name-$version.tar.xz \
+	gschemas.compiled)
+
+build() {
+	sed 's|/var/run/dbus|/run/dbus|' -i $name-$version/gio/gdbusaddress.c
+
+	meson setup build $name-$version \
+		--prefix=/usr \
+		--libexecdir=/usr/lib/glib \
+		--buildtype=plain \
+		--wrap-mode nodownload \
+		-D b_lto=true \
+		-D b_pie=true \
+		-D nls=disabled \
+		-D selinux=disabled \
+		-D gtk_doc=false \
+		-D tests=false
+	meson compile -C build -j ${JOBS:-1}
+	DESTDIR=$PKG meson install -C build
+
+	export PYTHONHASHSEED=0
+	/usr/bin/python3 -m compileall -d /usr/share/glib-2.0/codegen $PKG/usr/share/glib-2.0/codegen
+	/usr/bin/python3 -O -m compileall -d /usr/share/glib-2.0/codegen $PKG/usr/share/glib-2.0/codegen
+
+	install -m 0644 $SRC/gschemas.compiled $PKG/usr/share/glib-2.0/schemas/gschemas.compiled
+	prt-get isinst bash-completion || rm -r $PKG/usr/share/bash-completion
+}
