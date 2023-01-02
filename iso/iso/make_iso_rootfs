@@ -102,6 +102,10 @@ pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/xz#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/yaboot#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/zlib#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/zstd#*.pkg.tar.xz
+pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/expat#*.pkg.tar.xz
+pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/flex#*.pkg.tar.xz
+cp /usr/lib/*stdc*so*.6 $ROOTFS_DIR/usr/lib
+cp /usr/lib/*atomic*so*.1 $ROOTFS_DIR/usr/lib
 
 date >$ROOTFS_DIR/DATE
 
@@ -139,9 +143,11 @@ ln -s  /tmp/var $ROOTFS_DIR/var
 cd $ROOTFS_DIR/usr && rm -rf man include lib/*.a lib/*.o lib/gconv lib/locale src
 cd $ROOTFS_DIR/usr/share && mkdir l v x; cp terminfo/l/linux l; cp terminfo/v/vt100 v; cp terminfo/x/xterm x; rm -rf terminfo/*; mv l v x terminfo
 cd $ROOTFS_DIR/usr/share && rm -rf et ss vim i18n zoneinfo
+cd $ROOTFS_DIR/usr/share && rm -rf man*/*
 cd $ROOTFS_DIR/usr/bin && rm cal locale localedef compile_et mk_cmds
 cd $ROOTFS_DIR/usr/sbin && rm groupadd groupdel groupmod useradd userdel usermod grpck pwck iconvconfig
 cd $ROOTFS_DIR/etc && rm -rf cron resolv.conf lilo.conf sysctl.conf pkgadd.conf pkgmk.conf securetty
+cd $ROOTFS_DIR && rm -fr lib/modules/*/kernel/sound
 
 #
 # Install CRUX install scripts and
