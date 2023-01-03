@@ -165,7 +165,7 @@ get_missing_deps() {
 	needed=""
 	toinstall=`sed 's/\#.*//g' $pkgfile`
 	for f in $toinstall; do
-		pdeps=`grep "^$f\:" $depsfile|sed "s|^$f: ||g"`
+		pdeps=`grep "^$f:" $depsfile|sed "s|^$f: ||g"`
 		for d in $pdeps; do
 			needed="$needed $d"
 		done
