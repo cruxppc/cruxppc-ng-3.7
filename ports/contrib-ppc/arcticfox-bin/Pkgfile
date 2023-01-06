@@ -7,9 +7,9 @@
 # This is experimental and not recommended except for testing purposes.
 
 name=arcticfox-bin
-version=40.0
+version=40.1
 release=1
-source=(arcticfox-40.0.linux-powerpc.tar.bz2)
+source=(arcticfox-40.1.linux-powerpc.tar.bz2)
 
 build() {
 	install -d -m 755 $PKG/usr/lib
