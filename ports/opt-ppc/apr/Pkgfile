@@ -1,35 +1,24 @@
 # Description: Apache Portable Runtime library
-# Maintainer:  cruxppc at gmail dot com
-# URL:         http://apr.apache.org/
-# Depends on:  util-linux, expat, db, gdbm
+# Maintainer: cruxppc at gmail dot com
+# URL: https://apr.apache.org/
+# Depends on: util-linux
 
 name=apr
-version=1.7.0
+version=1.7.2
 release=1
-source=(http://www.apache.org/dist/$name/$name-$version.tar.bz2 \
-        http://www.apache.org/dist/$name/$name-util-1.6.1.tar.bz2)
+source=(https://downloads.apache.org/$name/$name-$version.tar.bz2)
 
 build(){
-    cd $name-$version
-    ./configure --prefix=/usr \
+	cd $name-$version
+
+	./configure \
+		--prefix=/usr \
                 --disable-nonportable-atomics \
                 ap_cv_atomic_builtins=no \
-                --with-installbuilddir=/usr/share/apr-1 
-    make 
-    make -j1 DESTDIR=$PKG install
+		--with-installbuilddir=/usr/share/apr-1 
+	make
+	make DESTDIR=$PKG install
 
-    cd $SRC/$name-util-1.6.1
-    ./configure --prefix=/usr \
-                --with-apr=$SRC/$name-$version \
-                --with-expat=/usr \
-                --with-berkeley-db=/usr \
-                --with-gdbm=/usr \
-                --without-sqlite3 \
-                --disable-util-dso
-    make
-    make DESTDIR=$PKG install
-
-    sed -i -r "/^APR_(SOURCE|BUILD)/s|=.*|=|" $PKG/usr/bin/apr-1-config
-    sed -i -r "/^APU_(SOURCE|BUILD)/s|=.*|=|" $PKG/usr/bin/apu-1-config
-    rm -r $PKG/usr/lib/*.exp
+	sed -i -r "/^APR_(SOURCE|BUILD)/s|=.*|=|" $PKG/usr/bin/apr-1-config
+	rm -r $PKG/usr/lib/*.exp
 }
