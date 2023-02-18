@@ -94,8 +94,8 @@ if [ -z "$1" ]; then
 fi
 
 
-##### # 3.5 -> 3.6 #####
-echo "* CRUX PPC 3.5 -> 3.6 setup-helper"
+##### # 3.6 -> 3.7 #####
+echo "* CRUX PPC 3.6 -> 3.7 setup-helper"
 
 inject_packages linux-pam
 

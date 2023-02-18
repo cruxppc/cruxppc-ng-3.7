@@ -3,7 +3,7 @@ this from the install iso, be aware that there may be a newer
 version of this document in www.github.com/cruxppc/cruxppc-ng-3.7/iso/doc.
 
 Release Notes for CRUX PPC 3.7
-12/20/2022
+02/17/2023
 
    This page discusses the relevant changes introduced in CRUX PPC 3.7.
 
@@ -65,6 +65,15 @@ Release Notes for CRUX PPC 3.7
 
   Known issues and usage notes
 
+
+   The arcticfox build fails with errors on 3.7.   For this initial release the
+   arcticfox package was taken from the 3.6 release.   This is not ideal but seems
+   to funciton properly.   The build should be fixed in a subsequent release.
+
+   The arcticfox version is 27.12.0 which is not the latest available.   The later
+   versions do not seem to work as well as  the 27.12.0 version so the early 
+   version is used.   If you want to use a later version of arcticfox, you can
+   download and install the ppc binary using the contrib-ppc/arcticfox-bin port.
 
    A few warnings will be displayed during boot of the install CD.   These do not
    cause the install to fail and can be ignored.  
