@@ -4,12 +4,12 @@
 
 name=glibc
 version=2.36
-release=3
+release=5
 _kernel_version=5.15.55
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz
-	glibc-$version-3.patch
+	glibc-$version-5.patch
 	glibc-2.35-make-4.4-MAKEFLAGS.patch
 	hosts resolv.conf nsswitch.conf host.conf ld.so.conf
 	locale-gen locale.gen.in)
