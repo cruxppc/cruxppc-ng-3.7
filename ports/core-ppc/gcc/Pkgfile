@@ -4,19 +4,16 @@
 # Depends on: libmpc zlib zstd
 
 name=gcc
-version=12.2.0
-release=1
+version=12.3.0
+release=2
 source=(https://sourceware.org/pub/gcc/releases/gcc-$version/$name-$version.tar.xz
-	$name-nocheck-fixincludes.patch $name-4.7.3-multilib-dirs.patch)
+	$name-nocheck-fixincludes.patch $name-4.7.3-multilib-dirs.patch
+	fix-nested-generic-lambda.patch)
 
 build() {
-	# fix libasan.a
-	sed -e '/static.*SIGSTKSZ/d' \
-		-e 's/return kAltStackSize/return SIGSTKSZ * 4/' \
-		-i $name-$version/libsanitizer/sanitizer_common/sanitizer_posix_libcdep.cpp
-
 	patch -d $name-$version -p1 -i $SRC/$name-nocheck-fixincludes.patch
 	#patch -d $name-$version -p1 -i $SRC/$name-4.7.3-multilib-dirs.patch
+	patch -d $name-$version -p1 -i $SRC/fix-nested-generic-lambda.patch
 
 	# pipe fails tests
 	CFLAGS=${CFLAGS/-pipe/}

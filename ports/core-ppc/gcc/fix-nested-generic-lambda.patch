@@ -1,0 +1,25 @@
+X-Git-Url: https://gcc.gnu.org/git/?p=gcc.git;a=blobdiff_plain;f=gcc%2Fcp%2Fpt.cc;h=79bc9c014c8504b7dddf094c4e2f36b4fa50d24b;hp=c7f4a95a7237ff91cbc0d81dc78de1ca35579b44;hb=396a4e76afec30d2461638f569cae18955eb4ad2;hpb=9410a52061ffe4a9e6ef8fd82f9c21d1874ff589
+
+diff --git a/gcc/cp/pt.cc b/gcc/cp/pt.cc
+index c7f4a95a723..79bc9c014c8 100644
+--- a/gcc/cp/pt.cc
++++ b/gcc/cp/pt.cc
+@@ -4106,10 +4106,14 @@ find_parameter_packs_r (tree *tp, int *walk_subtrees, void* data)
+     case TAG_DEFN:
+       t = TREE_TYPE (t);
+       if (CLASS_TYPE_P (t))
+-	/* Local class, need to look through the whole definition.  */
+-	for (tree bb : BINFO_BASE_BINFOS (TYPE_BINFO (t)))
+-	  cp_walk_tree (&BINFO_TYPE (bb), &find_parameter_packs_r,
+-			ppd, ppd->visited);
++	{
++	  /* Local class, need to look through the whole definition.
++	     TYPE_BINFO might be unset for a partial instantiation.  */
++	  if (TYPE_BINFO (t))
++	    for (tree bb : BINFO_BASE_BINFOS (TYPE_BINFO (t)))
++	      cp_walk_tree (&BINFO_TYPE (bb), &find_parameter_packs_r,
++			    ppd, ppd->visited);
++	}
+       else
+ 	/* Enum, look at the values.  */
+ 	for (tree l = TYPE_VALUES (t); l; l = TREE_CHAIN (l))
