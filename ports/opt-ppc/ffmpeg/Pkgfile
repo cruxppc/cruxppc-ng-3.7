@@ -1,11 +1,11 @@
 # Description: Complete solution to record, convert and stream audio and video.
 # URL: https://ffmpeg.org/
 # Maintainer: cruxppc at gmail com
-# Depends on: alsa-lib dav1d fdk-aac nv-codec-headers lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265 yasm
-# Optional: alsa-lib cuda dav1d fdk-aac nv-codec-headers gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp opus pulseaudio x264 x265
+# Depends on: alsa-lib amf-headers cuda dav1d fdk-aac freetype gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp nv-codec-headers opus pulseaudio svt-av1 x264 x265 yasm
+# Optional: alsa-lib amf-headers cuda dav1d fdk-aac freetype gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp nv-codec-headers opus pulseaudio svt-av1 x264 x265
 
 name=ffmpeg
-version=5.1.2
+version=6.0
 release=1
 source=(https://ffmpeg.org/releases/$name-$version.tar.bz2
 	add-av_stream_get_first_dts-for-chromium.patch
@@ -14,52 +14,62 @@ source=(https://ffmpeg.org/releases/$name-$version.tar.bz2
 build() {
 	cd $name-$version
 
-[[ -e '/usr/bin/clang' && -e '/usr/lib/pkgconfig/cuda.pc' && -e '/usr/share/pkgconfig/ffnvcodec.pc' ]] && \
-	PKGMK_FFMPEG+=' --enable-cuda-llvm --enable-nonfree --enable-cuda-nvcc --enable-libnpp' && \
-	PKGMK_FFMPEG+=' --extra-cflags=-I/opt/cuda/include --extra-ldflags=-L/opt/cuda/lib64' && PATH="$PATH:/opt/cuda/bin"
+	prt-get isinst clang cuda nv-codec-headers && \
+		PKGMK_FFMPEG+=' --enable-cuda-llvm --enable-nonfree --enable-cuda-nvcc --enable-libnpp' && \
+		PKGMK_FFMPEG+=' --extra-cflags=-I/opt/cuda/include --extra-ldflags=-L/opt/cuda/lib64' && \
+		PATH="$PATH:/opt/cuda/bin"
 
-#[ -e '/usr/share/pkgconfig/ffnvcodec.pc' ] && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
-[ -e '/usr/include/AMF/core/VulkanAMF.h' ] && PKGMK_FFMPEG+=' --enable-amf'
-[ -e '/usr/lib/pkgconfig/libwebp.pc' ] && PKGMK_FFMPEG+=' --enable-libwebp'
-[ -e '/usr/lib/pkgconfig/vdpau.pc' ] && PKGMK_FFMPEG+=' --enable-vdpau'
-[ -e '/usr/lib/pkgconfig/freetype2.pc' ] && PKGMK_FFMPEG+=' --enable-libfreetype'
-[ -e '/usr/lib/pkgconfig/jack.pc' ] && PKGMK_FFMPEG+=' --enable-libjack'
-[ -e '/usr/lib/pkgconfig/x264.pc' ] && PKGMK_FFMPEG+=' --enable-libx264'
-[ -e '/usr/lib/pkgconfig/x265.pc' ] && PKGMK_FFMPEG+=' --enable-libx265'
-[ -e '/usr/lib/pkgconfig/libass.pc' ] && PKGMK_FFMPEG+=' --enable-libass'
-[ -e '/usr/lib/libgsm.so' ] && PKGMK_FFMPEG+=' --enable-libgsm'
-[ -e '/usr/include/lame/lame.h' ] && PKGMK_FFMPEG+=' --enable-libmp3lame'
-[ -e '/usr/lib/pkgconfig/opus.pc' ] && PKGMK_FFMPEG+=' --enable-libopus'
-[ -e '/usr/lib/pkgconfig/vpx.pc' ] && PKGMK_FFMPEG+=' --enable-libvpx'
-[ -e '/usr/lib/pkgconfig/vorbis.pc' ] && PKGMK_FFMPEG+=' --enable-libvorbis'
-[ -e '/usr/lib/pkgconfig/theora.pc' ] && PKGMK_FFMPEG+=' --enable-libtheora'
-[ -e '/usr/lib/pkgconfig/libpulse.pc' ] && PKGMK_FFMPEG+=' --enable-libpulse'
-[ -e '/usr/lib/pkgconfig/fdk-aac.pc' ] && PKGMK_FFMPEG+=' --enable-libfdk-aac --enable-nonfree'
-[ -e '/usr/lib/pkgconfig/dav1d.pc' ] && PKGMK_FFMPEG+=' --enable-libdav1d'
-
-	if [ -e '/usr/lib/pkgconfig/gnutls.pc' ]; then
-		PKGMK_FFMPEG+=' --enable-gnutls'
-	else
-		PKGMK_FFMPEG+=' --enable-openssl --enable-nonfree'
-	fi
+prt-get isinst amf-headers && PKGMK_FFMPEG+=' --enable-amf'
+	prt-get isinst dav1d && PKGMK_FFMPEG+=' --enable-libdav1d'
+	prt-get isinst fdk-aac && PKGMK_FFMPEG+=' --enable-libfdk-aac --enable-nonfree'
+	prt-get isinst freetype && PKGMK_FFMPEG+=' --enable-libfreetype'
+	prt-get isinst gnutls && PKGMK_FFMPEG+=' --enable-gnutls' || PKGMK_FFMPEG+=' --enable-openssl --enable-nonfree'
+	prt-get isinst gsm && PKGMK_FFMPEG+=' --enable-libgsm'
+	prt-get isinst jack && PKGMK_FFMPEG+=' --enable-libjack'
+	prt-get isinst lame && PKGMK_FFMPEG+=' --enable-libmp3lame'
+	prt-get isinst libass && PKGMK_FFMPEG+=' --enable-libass'
+	prt-get isinst libtheora && PKGMK_FFMPEG+=' --enable-libtheora'
+	prt-get isinst libvdpau && PKGMK_FFMPEG+=' --enable-vdpau'
+	prt-get isinst libvorbis && PKGMK_FFMPEG+=' --enable-libvorbis'
+	prt-get isinst libvpx && PKGMK_FFMPEG+=' --enable-libvpx'
+	prt-get isinst libwebp && PKGMK_FFMPEG+=' --enable-libwebp'
+	# prt-get isinst nv-codec-headers && PKGMK_FFMPEG+=' --enable-nvdec --enable-nvenc'
+	prt-get isinst opus && PKGMK_FFMPEG+=' --enable-libopus'
+	prt-get isinst pulseaudio && PKGMK_FFMPEG+=' --enable-libpulse'
+	prt-get isinst svt-av1 && PKGMK_FFMPEG+=' --enable-libsvtav1'
+	prt-get isinst x264 && PKGMK_FFMPEG+=' --enable-libx264'
+	prt-get isinst x265 && PKGMK_FFMPEG+=' --enable-libx265'
 
 	patch -Np1 -i $SRC/add-av_stream_get_first_dts-for-chromium.patch
 
+	sed -i -e '/check_cflags -fdiagnostics-color=auto/d' configure
+
 	./configure ${PKGMK_FFMPEG} \
 		--prefix=/usr \
-		--disable-debug \
-		--disable-doc \
+		--optflags="$CFLAGS" \
+		--cc=/usr/bin/gcc \
+		--cxx=/usr/bin/g++ \
+		--ar=/usr/bin/gcc-ar \
+		--nm=/usr/bin/gcc-nm \
+		--ranlib=/usr/bin/gcc-ranlib \
+		--strip=/usr/bin/strip \
 		--enable-gpl \
 		--enable-version3 \
 		--enable-shared \
 		--enable-pic \
+		--enable-lto \
 		--enable-ffplay \
 		--enable-avfilter \
 		--enable-postproc \
 		--enable-pthreads \
+		--enable-swresample \
+		--disable-debug \
+		--disable-doc \
+		--disable-libcelt \
+		--disable-optimizations \
 		--disable-altivec \
 		--extra-ldflags="-latomic" \
-		--enable-swresample
+		--disable-stripping
 
 	make
 	make DESTDIR=$PKG install install-man
