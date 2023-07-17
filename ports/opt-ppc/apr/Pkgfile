@@ -4,7 +4,7 @@
 # Depends on: util-linux
 
 name=apr
-version=1.7.2
+version=1.7.4
 release=1
 source=(https://downloads.apache.org/$name/$name-$version.tar.bz2)
 
