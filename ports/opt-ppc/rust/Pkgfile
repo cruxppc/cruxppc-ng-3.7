@@ -6,9 +6,9 @@
 # Optional: sccache ccache libgit2 lld polly
 
 name=rust
-version=1.60.0
-_date=2022-02-24
-_rustc=1.59.0
+version=1.65.0
+_date=2022-09-22
+_rustc=1.64.0
 _cargo=$_rustc
 _llvm=14.0.3
 release=1
@@ -78,10 +78,10 @@ build() {
 	_check_version
 
 	cd "${name}c-$version-src"
-	patch -p1 -i $SRC/0040-rls-atomics.patch
+#	patch -p1 -i $SRC/0040-rls-atomics.patch
 
 	# Patch cargo so credential helpers are in /usr/lib instead of /usr/libexec
-	patch -p1 -i $SRC/libexec.patch
+#	patch -p1 -i $SRC/libexec.patch
 
 	# Use our *-pc-linux-gnu targets, making LTO with clang simpler
 	patch -p1 -i $SRC/0002-compiler-Change-LLVM-targets.patch
@@ -93,8 +93,8 @@ build() {
 	patch -p1 -i $SRC/0006-do-not-install-libunwind-source-removed.patch
 	#patch -p1 -i $SRC/0007-fix-rustdoc-when-cross-compiling.patch
 	patch -p1 -i $SRC/0008-link-stage-2-tools-dynamically-to-libstd.patch
-	patch -p1 -i $SRC/fix-ppc32.patch
-	patch -p1 -i $SRC/ld-library-path.patch
+	#patch -p1 -i $SRC/fix-ppc32.patch
+	#patch -p1 -i $SRC/ld-library-path.patch
 	#patch -p1 -i $SRC/native-sysroot.patch
 	patch -p1 -i $SRC/need-ssp-nonshared-and-execinfo.patch
 

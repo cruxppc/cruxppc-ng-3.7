@@ -1,0 +1,39 @@
+# Description: SVG rendering library with cairo backend
+# URL: https://wiki.gnome.org/Projects/LibRsvg
+# Maintainer: Danny Rawlins, crux at romster dot me
+# Depends on: brotli gdk-pixbuf pango rust
+# Optional: clang graphite2 lld sccache
+
+name=librsvg
+version=2.55.3
+release=1
+source=(https://download.gnome.org/sources/$name/${version%.*}/$name-$version.tar.xz)
+
+build() {
+	cd $name-$version
+
+	prt-get isinst sccache && export RUSTC_WRAPPER=/usr/bin/sccache
+	mkdir "$PKGMK_SOURCE_DIR/rust" || true
+	export CARGO_HOME="$PKGMK_SOURCE_DIR/rust"
+
+	export RUSTFLAGS+=' -C link-arg=-flto=thin'
+	prt-get isinst lld && export LD=ld.lld LDFLAGS+=' -Wl,-fuse-ld=lld' RUSTFLAGS+=' -C link-arg=-fuse-ld=lld'
+	prt-get isinst clang && export CC='clang' CXX='clang++' AR='llvm-ar' NM='llvm-nm' RANLIB='llvm-ranlib' \
+		CFLAGS+=' -flto=thin' CXXFLAGS+=' -flto=thin' LDFLAGS+=' -Wl,-flto=thin'
+
+	# causes segfault if set
+	unset __GL_NO_DSO_FINALIZER
+
+	./configure \
+		--prefix=/usr \
+		--disable-gtk-doc \
+		--disable-tools \
+		--disable-debug \
+		--disable-nls \
+		--enable-pixbuf-loader
+
+	make
+	make DESTDIR=$PKG install
+
+	rm -r $PKG/usr/share/doc
+}
