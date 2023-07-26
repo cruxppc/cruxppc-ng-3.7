@@ -4,13 +4,12 @@
 
 name=glibc
 version=2.36
-release=5
+release=6
 _kernel_version=5.15.55
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz
-	glibc-$version-5.patch
-	glibc-2.35-make-4.4-MAKEFLAGS.patch
+	glibc-$version-6.patch
 	hosts resolv.conf nsswitch.conf host.conf ld.so.conf
 	locale-gen locale.gen.in)
 
@@ -21,8 +20,7 @@ build() {
 	make -C $SRC/linux-$_kernel_version INSTALL_HDR_PATH=$PKG/usr headers_install
 	chown root:root $PKG/usr
 
-	patch -p1 -d $SRC/$name-${version:0:4} -i $SRC/$name-$version-5.patch
-#	patch -p1 -d $SRC/$name-${version:0:4} -i $SRC/glibc-2.35-make-4.4-MAKEFLAGS.patch
+	patch -p1 -d $SRC/$name-${version:0:4} -i $SRC/$name-$version-6.patch
 
 	mkdir $SRC/build
 	cd $SRC/build
