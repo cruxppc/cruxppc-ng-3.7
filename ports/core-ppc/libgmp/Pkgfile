@@ -3,7 +3,7 @@
 # Maintainer: cruxppc at gmail dot com
 
 name=libgmp
-version=6.2.1
+version=6.3.0
 release=1
 source=(https://gmplib.org/download/gmp/gmp-$version.tar.xz
 	gmp.h)

@@ -3,7 +3,7 @@
 # Maintainer: cruxppc at gmail dot com
 
 name=rhash
-version=1.4.4
+version=1.4.3
 release=1
 source=(https://github.com/rhash/RHash/archive/v$version/$name-$version.tar.gz)
 
