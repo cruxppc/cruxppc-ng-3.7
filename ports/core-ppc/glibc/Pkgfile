@@ -4,23 +4,22 @@
 
 name=glibc
 version=2.36
-release=6
+release=7
 _kernel_version=5.15.55
 
 source=(https://ftp.gnu.org/gnu/glibc/glibc-$version.tar.xz
 	https://www.kernel.org/pub/linux/kernel/v5.x/linux-$_kernel_version.tar.xz
-	glibc-$version-6.patch
+	glibc-$version-7.patch
 	hosts resolv.conf nsswitch.conf host.conf ld.so.conf
 	locale-gen locale.gen.in)
 
 build() {
 	# install kernel headers
 	make -C $SRC/linux-$_kernel_version mrproper
-	make -C $SRC/linux-$_kernel_version headers_check
 	make -C $SRC/linux-$_kernel_version INSTALL_HDR_PATH=$PKG/usr headers_install
 	chown root:root $PKG/usr
 
-	patch -p1 -d $SRC/$name-${version:0:4} -i $SRC/$name-$version-6.patch
+	patch -p1 -d $SRC/$name-${version:0:4} -i $SRC/$name-$version-7.patch
 
 	mkdir $SRC/build
 	cd $SRC/build
