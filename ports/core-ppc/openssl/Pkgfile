@@ -3,7 +3,7 @@
 # Maintainer: cruxppc at gmail dot com
 
 name=openssl
-version=3.2.0
+version=3.2.1
 release=1
 source=(https://www.openssl.org/source/$name-$version.tar.gz \
 	mksslcert.sh)
