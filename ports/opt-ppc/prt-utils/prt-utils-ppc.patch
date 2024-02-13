@@ -9,6 +9,8 @@ diff -Naur a/revdep/elf.cpp b/revdep/elf.cpp
 +		case EM_PPC:    break;
 +#elif defined(__powerpc64__)
 +		case EM_PPC64:  break;
+ #elif defined(__riscv)
+		case EM_RISCV:	break;
  #else
  #error "unsupported architecture"
  #endif
