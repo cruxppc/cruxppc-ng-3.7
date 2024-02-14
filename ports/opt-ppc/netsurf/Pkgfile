@@ -4,7 +4,7 @@
 # Depends on:  libidn libmng gtk p5-html-parser
 
 name=netsurf
-version=3.10
+version=3.11
 release=1
 source=(http://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-all-$version.tar.gz 
     netsurf.desktop )
