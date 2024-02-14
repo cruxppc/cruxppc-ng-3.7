@@ -8,23 +8,23 @@ binutils: flex zlib binutils
 bison: attr ncurses acl gettext bison 
 bzip2: bzip2 
 ca-certificates: ca-certificates 
-cmake: libnghttp2 openssl zlib xz expat jsoncpp attr bzip2 lzo libuv lzlib ncurses rhash zstd acl curl libarchive cmake 
+cmake: libnghttp2 openssl xz zlib expat jsoncpp attr bzip2 lzo libuv lzlib ncurses rhash zstd acl curl libarchive cmake 
 coreutils: attr linux-pam libgmp acl libcap coreutils 
 cpio: cpio 
-curl: libnghttp2 openssl zlib xz zstd curl 
+curl: libnghttp2 openssl xz zlib zstd curl 
 dash: dash 
 db: db 
 dcron: dcron 
 dhcpcd: kmod eudev dhcpcd 
 diffutils: diffutils 
 dumb_runtime_dir: dumb_runtime_dir 
-e2fsprogs: bzip2 kmod zlib ncurses xz eudev file readline util-linux e2fsprogs 
+e2fsprogs: bzip2 kmod xz zlib ncurses eudev zstd readline file util-linux e2fsprogs 
 ed: ed 
 elfutils: bzip2 xz zlib elfutils 
 eudev: kmod eudev 
 exim: db libpcre2 openssl exim 
 expat: expat 
-file: zlib file 
+file: bzip2 xz zlib zstd file 
 filesystem: filesystem 
 findutils: findutils 
 flex: flex 
@@ -38,7 +38,7 @@ grep: libpcre2 grep
 groff: groff 
 gzip: gzip 
 hdparm: hdparm 
-httpup: libnghttp2 openssl zlib xz zstd curl httpup 
+httpup: libnghttp2 openssl xz zlib zstd curl httpup 
 iana-etc: iana-etc 
 inetutils: ncurses readline inetutils 
 iproute2: db bzip2 xz zlib jansson libedit libgmp libmnl expat ncurses libffi libnsl libtirpc mpdecimal linux-pam elfutils libnftnl readline libcap gdbm sqlite3 python3 nftables iptables iproute2 
@@ -50,7 +50,7 @@ kmod: kmod
 less: libpcre2 ncurses less 
 libarchive: attr bzip2 lzo xz zlib acl zstd libarchive 
 libcap: linux-pam libcap 
-libdevmapper: bzip2 kmod zlib ncurses xz eudev file readline util-linux libdevmapper 
+libdevmapper: bzip2 kmod xz zlib ncurses eudev zstd readline file util-linux libdevmapper 
 libedit: libedit 
 libffi: libffi 
 libgmp: libgmp 
@@ -80,7 +80,7 @@ mpdecimal: mpdecimal
 nasm: nasm 
 ncurses: ncurses 
 nftables: jansson libedit libgmp libmnl bzip2 expat ncurses libffi libnsl libtirpc mpdecimal zlib xz libnftnl readline gdbm sqlite3 python3 nftables 
-ninja: libnghttp2 openssl zlib xz expat jsoncpp attr bzip2 lzo libuv lzlib ncurses rhash zstd acl curl libarchive cmake ninja 
+ninja: libnghttp2 openssl xz zlib expat jsoncpp attr bzip2 lzo libuv lzlib ncurses rhash zstd acl curl libarchive cmake ninja 
 openssh: linux-pam openssl zlib openssh 
 openssl: openssl 
 patch: patch 
@@ -112,7 +112,7 @@ tar: tar
 time: time 
 tzdata: tzdata 
 usbutils: kmod eudev libusb usbutils 
-util-linux: bzip2 kmod zlib ncurses xz eudev file readline util-linux 
+util-linux: bzip2 kmod xz zlib ncurses eudev zstd readline file util-linux 
 vim: ncurses attr acl vim 
 which: which 
 xz: xz 
