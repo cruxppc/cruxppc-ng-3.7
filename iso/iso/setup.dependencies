@@ -129,7 +129,6 @@ dbus: expat dbus
 dbus-glib: expat bzip2 xz zlib libpcre2 ncurses libffi libnsl libtirpc mpdecimal libnghttp2 openssl jsoncpp attr lzo libuv lzlib rhash kmod dbus elfutils zstd readline acl eudev curl file gdbm sqlite3 libarchive util-linux python3 cmake python3-setuptools ninja meson glib dbus-glib 
 dialog: ncurses dialog 
 dosfstools: dosfstools 
-dracut: dracut 
 f2fs-tools: f2fs-tools 
 fakeroot: fakeroot 
 fetchmail: openssl fetchmail 
@@ -154,7 +153,6 @@ libaio: libaio
 libevent: openssl libevent 
 libgcrypt: libgpg-error libgcrypt 
 libgpg-error: libgpg-error 
-libidl: bzip2 xz zlib libpcre2 expat ncurses libffi libnsl libtirpc mpdecimal libnghttp2 openssl jsoncpp attr lzo libuv lzlib rhash kmod elfutils zstd readline acl eudev curl file gdbm sqlite3 libarchive util-linux python3 cmake python3-setuptools ninja meson glib libidl 
 libjpeg-turbo: nasm libjpeg-turbo 
 libnl: libnl 
 libpcap: libpcap 
@@ -180,7 +178,6 @@ ppp: libpcap openssl ppp
 prt-utils: bzip2 xz zlib elfutils prt-utils 
 python3-mako: bzip2 expat ncurses libffi libnsl libtirpc mpdecimal zlib xz readline gdbm sqlite3 python3 python3-setuptools python3-markupsafe python3-mako 
 python3-markupsafe: bzip2 expat ncurses libffi libnsl libtirpc mpdecimal zlib xz readline gdbm sqlite3 python3 python3-setuptools python3-markupsafe 
-rdfind: libgmp nettle rdfind 
 reiserfsprogs: bzip2 kmod xz zlib ncurses eudev zstd readline file util-linux e2fsprogs reiserfsprogs 
 rpcbind: libtirpc rpcbind 
 rpcsvc-proto: rpcsvc-proto 
@@ -305,7 +302,6 @@ libass: fribidi harfbuzz libpng libass
 libcanberra: alsa-lib gtk gtk3 libvorbis libcanberra
 libfm: gtk menu-cache lxmenu-data libexif vala libfm
 libfm-extra: glib libfm-extra
-libsamplerate: libsndfile libsamplerate
 libsdl2: alsa-lib mesa libsdl2
 libsndfile: alsa-lib flac libvorbis opus python3 libsndfile
 libtheora: libvorbis libtheora
