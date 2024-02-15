@@ -5,7 +5,7 @@
 # Optional: alsa-lib amf-headers cuda dav1d fdk-aac freetype gnutls gsm jack jack-audio-connection-kit lame libass libsdl2 libtheora libva libvdpau libvorbis libvpx libwebp nv-codec-headers opus pulseaudio svt-av1 x264 x265
 
 name=ffmpeg
-version=6.0
+version=6.1.1
 release=1
 source=(https://ffmpeg.org/releases/$name-$version.tar.bz2
 	add-av_stream_get_first_dts-for-chromium.patch
