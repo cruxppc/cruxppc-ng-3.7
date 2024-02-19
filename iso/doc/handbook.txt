@@ -10,7 +10,7 @@ materials provide additional information that may helpful.
 
 
 HANDBOOK FOR CRUX PPC 3.7 
-02/17/2023
+02/19/2024
 
    1. Preface
 
@@ -108,7 +108,7 @@ HANDBOOK FOR CRUX PPC 3.7
 
    Copyright (c) 2001-2004 Per Liden
    Copyright (c) 2004-2005 Giulivo Navigante
-   Copyright (c) 2005-2023 The CRUX PPC team
+   Copyright (c) 2005-2024 The CRUX PPC team
 
    This handbook covers the installation, configuration and administration of
    CRUX PPC  and  most in  general  of  the CRUX  distribution.  For  further
