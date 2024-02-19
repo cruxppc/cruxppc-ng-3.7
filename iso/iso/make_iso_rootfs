@@ -49,7 +49,7 @@ pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/eudev#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/exfat-utils*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/file#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/findutils#*.pkg.tar.xz
-pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/fuse#*.pkg.tar.xz
+pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/fuse3#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/gawk#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/grep#*.pkg.tar.xz
 pkgadd --root $ROOTFS_DIR $CRUX_DIR/*/gzip#*.pkg.tar.xz
